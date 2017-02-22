@@ -1,0 +1,93 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: #333;
+  color: #FFF;
+}
+
+#tabuleiro {
+  width: 75vh;
+  height: 75vh;
+  margin: 64px auto 0 auto;
+}
+#tabuleiro .casa {
+  box-sizing: border-box;
+  border: 4px solid #FFF;
+  width: 33.33333%;
+  height: 33.33333%;
+  float: left;
+  cursor: pointer;
+  position: relative;
+  transition: all .25s ease;
+  opacity: .25;
+}
+#tabuleiro .casa:hover:not(.o):not(.x) {
+  background: rgba(255, 255, 255, 0.18);
+}
+#tabuleiro .casa:nth-child(1) {
+  border-top: none;
+  border-left: none;
+}
+#tabuleiro .casa:nth-child(2) {
+  border-top: none;
+}
+#tabuleiro .casa:nth-child(3) {
+  border-top: none;
+  border-right: none;
+}
+#tabuleiro .casa:nth-child(4) {
+  border-left: none;
+}
+#tabuleiro .casa:nth-child(6) {
+  border-right: none;
+}
+#tabuleiro .casa:nth-child(7) {
+  border-left: none;
+  border-bottom: none;
+}
+#tabuleiro .casa:nth-child(8) {
+  border-bottom: none;
+}
+#tabuleiro .casa:nth-child(9) {
+  border-bottom: none;
+  border-right: none;
+}
+#tabuleiro .casa:after, #tabuleiro .casa:before {
+  content: "";
+  display: block;
+  position: absolute;
+  transition: all .25s ease;
+}
+#tabuleiro .casa.o:after {
+  width: 50%;
+  height: 50%;
+  border: 8px solid #FFF;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 100%;
+}
+#tabuleiro .casa.x:after, #tabuleiro .casa.x:before {
+  width: 8px;
+  height: 60%;
+  top: 50%;
+  left: 50%;
+  background: #FFF;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+#tabuleiro .casa.x:before {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+#tabuleiro.fim .casa {
+  opacity: .1;
+}
+#tabuleiro.fim .casa.ganhou {
+  opacity: 1;
+}
