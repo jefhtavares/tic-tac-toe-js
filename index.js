@@ -6,33 +6,33 @@
     }
 })(document);
 
-var matriz = [];
+var tabuleiro = undefined;
 var jogadorAtual = 0;
 
 function ready(){
+    initArray();
     criarTabuleiro(document.getElementById('tabuleiro'));
+    mostrarJogadorAtual();
 }
 
 function initArray(){
-    matriz = new Array(3);
+    tabuleiro = new Array(3);
 
     for(var i = 0; i < 3; i++){
-        matriz[i] = new Array(3);
+        tabuleiro[i] = new Array(3);
     }
 }
 
 function criarTabuleiro(divTabuleiro){
-    initArray();
-
     var templateHtml = document.getElementById('tpl-casa').innerHTML;
 
     var linha = 0, coluna = 0;
     for(var i = 0; i < 9; i++){
         divTabuleiro.insertAdjacentHTML('beforeend', templateHtml);
 
-        matriz[linha][coluna] = divTabuleiro.lastElementChild;
+        tabuleiro[linha][coluna] = divTabuleiro.lastElementChild;
 
-        matriz[linha][coluna].addEventListener('click', marcarCasa);
+        tabuleiro[linha][coluna].addEventListener('click', marcarCasa);
 
         if((coluna + 1) % 3 === 0){
             linha++;
@@ -54,4 +54,14 @@ function marcarCasa(){
     casa.className += ' marcado ' + (jogadorAtual == 0 ? 'x' : 'o');
     casa.setAttribute('data-marcado', true);
     jogadorAtual = !jogadorAtual;
+    mostrarJogadorAtual();
+}
+
+function mostrarJogadorAtual(){
+    var elemento = document.getElementById('jogador-atual');
+    elemento.innerText = 'Jogador ' + (Number(jogadorAtual) + 1);
+}
+
+function verificaVencedor(){
+
 }
