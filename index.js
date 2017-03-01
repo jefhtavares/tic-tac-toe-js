@@ -63,5 +63,13 @@ function mostrarJogadorAtual(){
 }
 
 function verificaVencedor(){
+    //var linha 
+}
 
+function marcarVencedores(elementos){
+    document.getElementById('tabuleiro').className += ' fim';
+
+    for(var i = 0; i < 3; i++){
+        elementos[i].className += ' ganhou';
+    }
 }
