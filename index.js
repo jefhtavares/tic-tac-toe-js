@@ -78,10 +78,18 @@ function verificaVencedor(){
 
             if(linha === coluna)
                 somasDiagonais[0] += tabuleiro[linha][coluna];
+            
+            if(linha + coluna === (tabuleiro.length - 1))
+                somasDiagonais[1] += tabuleiro[linha][coluna];
         }
     }
 
-    console.log(somasDiagonais);
+    var l = somasLinhas.filter(function(item, index){
+        if(item === 3 || item === 6)
+            return { item: item, index: index };
+    });
+
+    console.log(l);
 }
 
 function marcarVencedores(elementos){
