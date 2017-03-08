@@ -7,7 +7,7 @@
 })(document);
 
 var tabuleiro = undefined;
-var jogadorAtual = 0;
+var jogadorAtual = 1;
 
 function ready(){
     initArray();
@@ -25,22 +25,16 @@ function initArray(){
 
 function criarTabuleiro(divTabuleiro){
     var templateHtml = document.getElementById('tpl-casa').innerHTML;
+    
+    for(var linha = 0; linha < 3; linha++){
+        for(var coluna = 0; coluna < 3; coluna++){
+            var htmlCasa = templateHtml.replace("LINHA", linha).replace("COLUNA", coluna);
+            divTabuleiro.insertAdjacentHTML('beforeend', htmlCasa);
 
-    var linha = 0, coluna = 0;
-    for(var i = 0; i < 9; i++){
-        divTabuleiro.insertAdjacentHTML('beforeend', templateHtml);
-
-        tabuleiro[linha][coluna] = divTabuleiro.lastElementChild;
-
-        tabuleiro[linha][coluna].addEventListener('click', marcarCasa);
-
-        if((coluna + 1) % 3 === 0){
-            linha++;
-            coluna = 0;
-        }else{
-            coluna += 1;
+            divTabuleiro.lastElementChild.addEventListener('click', marcarCasa);
+            tabuleiro[linha][coluna] = 0;
         }
-    }
+    }    
 }
 
 function marcarCasa(){
@@ -51,19 +45,43 @@ function marcarCasa(){
         return;
     }
 
-    casa.className += ' marcado ' + (jogadorAtual == 0 ? 'x' : 'o');
+    casa.className += ' marcado ' + (jogadorAtual === 1 ? 'x' : 'o');
     casa.setAttribute('data-marcado', true);
-    jogadorAtual = !jogadorAtual;
+    var linha = Number(casa.getAttribute('data-linha'));
+    var coluna = Number(casa.getAttribute('data-coluna'));
+
+    tabuleiro[linha][coluna] = jogadorAtual;
+
+    verificaVencedor();
+    toggleJogador();
     mostrarJogadorAtual();
+}
+
+function toggleJogador(){
+    jogadorAtual = (jogadorAtual === 1) ? 2 : 1;
 }
 
 function mostrarJogadorAtual(){
     var elemento = document.getElementById('jogador-atual');
-    elemento.innerText = 'Jogador ' + (Number(jogadorAtual) + 1);
+    elemento.innerText = 'Jogador ' + (Number(jogadorAtual));
 }
 
 function verificaVencedor(){
-    //var linha 
+    var somasLinhas = [0, 0, 0];
+    var somasColunas = [0, 0, 0];
+    var somasDiagonais = [0, 0];
+
+    for(var linha = 0; linha < tabuleiro.length; linha++){
+        for(var coluna = 0; coluna < tabuleiro[linha].length; coluna++){
+            somasLinhas[linha] += tabuleiro[linha][coluna];
+            somasColunas[coluna] += tabuleiro[linha][coluna];
+
+            if(linha === coluna)
+                somasDiagonais[0] += tabuleiro[linha][coluna];
+        }
+    }
+
+    console.log(somasDiagonais);
 }
 
 function marcarVencedores(elementos){
