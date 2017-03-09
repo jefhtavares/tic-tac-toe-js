@@ -50,7 +50,7 @@ function marcarCasa(){
     var linha = Number(casa.getAttribute('data-linha'));
     var coluna = Number(casa.getAttribute('data-coluna'));
 
-    tabuleiro[linha][coluna] = jogadorAtual;
+    tabuleiro[linha][coluna] = jogadorAtual === 1 ? 3 : 5;
 
     verificaVencedor();
     toggleJogador();
@@ -83,13 +83,6 @@ function verificaVencedor(){
                 somasDiagonais[1] += tabuleiro[linha][coluna];
         }
     }
-
-    var l = somasLinhas.filter(function(item, index){
-        if(item === 3 || item === 6)
-            return { item: item, index: index };
-    });
-
-    console.log(l);
 }
 
 function marcarVencedores(elementos){
