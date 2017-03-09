@@ -9,6 +9,8 @@
 var tabuleiro = undefined;
 var jogadorAtual = 1;
 
+var somasTabuleiro = { linhas: [0, 0, 0], colunas: [0, 0, 0], diagonais: [0, 0] };
+
 function ready(){
     initArray();
     criarTabuleiro(document.getElementById('tabuleiro'));
@@ -32,9 +34,9 @@ function criarTabuleiro(divTabuleiro){
             divTabuleiro.insertAdjacentHTML('beforeend', htmlCasa);
 
             divTabuleiro.lastElementChild.addEventListener('click', marcarCasa);
-            tabuleiro[linha][coluna] = 0;
+            tabuleiro[linha][coluna] = htmlCasa;
         }
-    }    
+    }
 }
 
 function marcarCasa(){
@@ -50,7 +52,18 @@ function marcarCasa(){
     var linha = Number(casa.getAttribute('data-linha'));
     var coluna = Number(casa.getAttribute('data-coluna'));
 
-    tabuleiro[linha][coluna] = jogadorAtual === 1 ? 3 : 5;
+    //tabuleiro[linha][coluna] = jogadorAtual === 1 ? 3 : 5;
+
+    var s = (jogadorAtual === 1) ? 3 : 5;
+
+    somasTabuleiro.linhas[linha] += s;
+    somasTabuleiro.colunas[coluna] += s;
+
+    if(linha === coluna)
+        somasTabuleiro.diagonais[0] += s;
+    
+    if(linha + coluna === (tabuleiro.length - 1))
+        somasTabuleiro.diagonais[1] += s;
 
     verificaVencedor();
     toggleJogador();
@@ -67,20 +80,21 @@ function mostrarJogadorAtual(){
 }
 
 function verificaVencedor(){
-    var somasLinhas = [0, 0, 0];
-    var somasColunas = [0, 0, 0];
-    var somasDiagonais = [0, 0];
+    for(var linha in somasTabuleiro.linhas){
+        if(linha === 9 || linha === 15){
+            marcarVencedores(tabuleiro[0]);
+        }
+    }
 
-    for(var linha = 0; linha < tabuleiro.length; linha++){
-        for(var coluna = 0; coluna < tabuleiro[linha].length; coluna++){
-            somasLinhas[linha] += tabuleiro[linha][coluna];
-            somasColunas[coluna] += tabuleiro[linha][coluna];
+    for(var coluna in somasTabuleiro.colunas){
+        if(linha === 9 || linha === 15){
+            // Alguém venceu
+        }
+    }
 
-            if(linha === coluna)
-                somasDiagonais[0] += tabuleiro[linha][coluna];
-            
-            if(linha + coluna === (tabuleiro.length - 1))
-                somasDiagonais[1] += tabuleiro[linha][coluna];
+    for(var diag in somasTabuleiro.diagonais){
+        if(linha === 9 || linha === 15){
+            // Alguém venceu
         }
     }
 }
