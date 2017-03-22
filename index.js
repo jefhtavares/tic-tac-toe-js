@@ -7,12 +7,42 @@
 })(document);
 
 var tabuleiro = undefined;
-var jogadorAtual = 1;
+var jogadorAtual = 0;
+var jogadores;
+
 
 function ready(){
     initArray();
+    initJogadores();
+    
     criarTabuleiro(document.getElementById('tabuleiro'));
     mostrarJogadorAtual();
+}
+
+function initJogadores(){
+    jogadores = new Array(2);
+
+    for(var i = 0; i < 2; i++){
+        var jogador = '', simbolo = '', multp = 0;
+        
+        if(i === 0){
+            jogador = 'primeiro';
+            simbolo = 'x';
+            multp = 3;
+        }else{
+            jogador = 'segundo';
+            simbolo = 'o';
+            multp = 5;
+        }
+            
+        if(!DEBUG) {
+            var nome = prompt('Entre com o nome do ' + jogador + ' jogador') || 'jogador' + (i + 1);
+        }else{
+            var nome = 'jogador ' + (i + 1);
+        }
+
+        jogadores[i] = { nome: nome, simbolo: simbolo, multiplicador: multp };
+    }
 }
 
 function initArray(){
@@ -45,12 +75,14 @@ function marcarCasa(){
         return;
     }
 
-    casa.className += ' marcado ' + (jogadorAtual === 1 ? 'x' : 'o');
+    var classJogador = jogadores[jogadorAtual].simbolo;
+
+    casa.className += ' marcado ' + classJogador;
     casa.setAttribute('data-marcado', true);
     var linha = Number(casa.getAttribute('data-linha'));
     var coluna = Number(casa.getAttribute('data-coluna'));
 
-    var valorJogador = (jogadorAtual === 1) ? 3 : 5;    
+    var valorJogador = jogadores[jogadorAtual].multiplicador;
     tabuleiro[linha][coluna] = valorJogador;
 
     verificaVencedor();
@@ -59,12 +91,12 @@ function marcarCasa(){
 }
 
 function toggleJogador(){
-    jogadorAtual = (jogadorAtual === 1) ? 2 : 1;
+    jogadorAtual = (jogadorAtual === 0) ? 1 : 0;
 }
 
 function mostrarJogadorAtual(){
     var elemento = document.getElementById('jogador-atual');
-    elemento.innerText = 'Jogador ' + (Number(jogadorAtual));
+    elemento.innerText = 'Vez de ' + jogadores[jogadorAtual].nome;
 }
 
 function verificaVencedor(){
@@ -106,25 +138,14 @@ function marcarVencedores(linha = undefined, coluna = undefined, diagonal = unde
     var childDivs = document.getElementById('tabuleiro').getElementsByTagName('div');
     for(var i = 0; i < childDivs.length; i++ ) {        
         var casa = childDivs[i];
-        var linhaCasa = casa.getAttribute('data-linha');
-        var colunaCasa = casa.getAttribute('data-coluna');
+        var linhaCasa = Number(casa.getAttribute('data-linha'));
+        var colunaCasa = Number(casa.getAttribute('data-coluna'));
 
-        if(linha === linhaCasa || coluna === colunaCasa){
-            casa.setAttribute('class', 'ganhou');
+        if(linha === linhaCasa || coluna === colunaCasa || (diagonal === 0 && linhaCasa === colunaCasa) || (diagonal === 1 && linhaCasa + colunaCasa === 2)){
+            casa.className += ' ganhou';
         }
+
+        casa.removeEventListener('click', marcarCasa);
     }
 }
 
-function logTabuleiro(){
-    var str = '';
-
-    for(var l = 0; l < 3; l++){
-        for(var c = 0; c < 3; c++){
-            str += tabuleiro[l][c] + '   ';
-        }
-
-        str += '\n';
-    }
-
-    console.log(str);
-}
