@@ -91,3 +91,15 @@ body {
 #tabuleiro.fim .casa.ganhou {
   opacity: 1;
 }
+
+.assinatura {
+  display: inline-block;
+  font-size: 16px;
+  color: #ccc;
+}
+
+.assinatura .foto {
+  vertical-align: middle;  
+  padding-left: 5px;
+  border-radius: 50%;
+}
